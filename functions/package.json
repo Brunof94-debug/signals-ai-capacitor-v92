@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^6.6.0",
+    "web-push": "^3.6.7"
+  }
+}
