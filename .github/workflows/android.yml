@@ -13,6 +13,8 @@ jobs:
         with:
           node-version: '18'
       - run: npm install
+          - run: npm install -D typescript
+
       - run: npm install -g @capacitor/cli
       - run: npx cap add android --skip-linking
       - name: Place google-services.json
