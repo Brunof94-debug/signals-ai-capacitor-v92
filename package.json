@@ -10,9 +10,9 @@
     "android": "npm run sync:android && npm run build:android"
   },
   "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/core": "^6.1.2",
-    "@capacitor/push-notifications": "^6.0.2"
+    "web-push": "^3.6.0",
+    "@netlify/functions": "^2.6.0",
+    "@netlify/blobs": "^4.1.0",
   },
   "devDependencies": {
     "rimraf": "^6.0.1"
