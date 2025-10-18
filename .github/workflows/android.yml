@@ -8,28 +8,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: |
-          npm install
-          npm install -D typescript
-          npm install -g @capacitor/cli
-      - name: Add Android platform
-        run: npx cap add android --skip-linking
-      - name: Place google-services.json
-        if: env.GOOGLE_SERVICES_JSON_BASE64
-        env:
-          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
-        run: |
-          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
-      - name: Build Android debug APK
-        run: |
-          cd android
-          ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -D typescript
+        npm install -g @capacitor/cli
+    - name: Add Android platform
+      run: npx cap add android
+    - name: Place google-services.json
+      if: env.GOOGLE_SERVICES_JSON_BASE64
+      env:
+        GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+      run: |
+        echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
+    - name: Build Android debug APK
+      run: |
+        cd android
+        ./gradlew assembleDebug
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-debug
+        path: android/app/build/outputs/apk/debug/app-debug.apk
