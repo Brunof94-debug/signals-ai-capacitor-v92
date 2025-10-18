@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm ci
+      - run: npm install
       - run: npm install -g @capacitor/cli
       - run: npx cap add android --skip-linking
       - name: Place google-services.json
