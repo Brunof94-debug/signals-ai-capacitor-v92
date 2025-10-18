@@ -22,7 +22,5 @@ jobs:
         run: |
           echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
       - run: cd android && ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v3
-        with:
-          name: app-debug
+      - uses: actions/upload-artifact@v4
           path: android/app/build/outputs/apk/debug/app-debug.apk
