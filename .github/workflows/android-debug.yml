@@ -1,0 +1,57 @@
+name: Android Debug APK (Capacitor)
+on:
+  workflow_dispatch: {}   # você roda manualmente no Actions
+  push:
+    branches: [ main ]    # opcional: roda a cada push no main
+
+jobs:
+  build-android-debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # (Opcional) se você precisa gerar a pasta web antes
+      - name: Build web (optional)
+        run: npm run build:web || echo "skip build:web"
+
+      # Garante plataforma Android e sincroniza
+      - name: Ensure Capacitor Android
+        run: |
+          npm ls @capacitor/android || npm i @capacitor/android -D
+          npx cap add android || echo "android/ já existe"
+          npx cap sync android
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Assemble Debug
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Upload APK (debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
