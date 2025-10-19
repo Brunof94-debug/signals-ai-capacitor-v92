@@ -1,94 +1,54 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BTC Signals AI</title>
-  <link rel="manifest" href="/signals-ai-capacitor-v92/manifest.webmanifest">
-  <meta name="theme-color" content="#0ea5e9" />
-  <link rel="icon" href="/signals-ai-capacitor-v92/assets/icon-192.png" sizes="192x192">
-  <link rel="apple-touch-icon" href="/signals-ai-capacitor-v92/assets/icon-192.png">
-  <link rel="stylesheet" href="/signals-ai-capacitor-v92/assets/style.css">
-  <script>window.__REPO_BASE__='/' + location.pathname.split('/')[1] + '/';</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Signals AI — v9.2</title>
+  <style>
+    body { font-family: system-ui, Arial; margin:16px; }
+    h1 { margin:0 0 12px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    button, select { padding:8px 12px; }
+    #log { font-family: ui-monospace, monospace; white-space: pre-wrap; background:#fafafa; border:1px solid #eee; padding:8px; height:160px; overflow:auto; }
+    table { border-collapse:collapse; width:100%; }
+    th, td { border:1px solid #eee; padding:6px 8px; font-size:14px; }
+    th { background:#f7f7f7; text-align:left; }
+    .ok { color:#0a8; }
+    .err { color:#c00; }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="/signals-ai-capacitor-v92/assets/icon-192.png" alt="logo">
-      <h1>BTC Signals AI</h1>
-    </div>
-    <button id="btnInstall" class="btn ghost">Instalar</button>
-  </header>
-  <main class="container">
-    <section class="card">
-      <h2>Operação</h2>
-      <div class="grid">
-        <label>Estratégia
-          <select id="strategy">
-            <option value="daytrade">Day Trade</option>
-            <option value="swing">Swing Trade</option>
-          </select>
-        </label>
-        <label>Par
-          <input id="pair" value="BTCUSDT">
-        </label>
-        <label>Timeframe
-          <select id="interval">
-            <option>1m</option><option>5m</option><option selected>15m</option><option>1h</option>
-          </select>
-        </label>
-        <label>RSI Período
-          <input id="rsiPeriod" type="number" value="14" min="2" max="50">
-        </label>
-      </div>
-      <div class="actions">
-        <button id="btnStart" class="btn">Iniciar</button>
-        <button id="btnStop" class="btn warn">Parar</button>
-        <button id="btnDiag" class="btn ghost">Diagnóstico</button>
-      </div>
-      <p id="status" class="muted">Aguardando…</p>
-    </section>
-    <section class="card">
-      <h2>Notificações</h2>
-      <div class="grid">
-        <button id="btnAskNotif" class="btn">Permitir notificações</button>
-        <button id="btnTestNotif" class="btn ghost">Testar notificação</button>
-      </div>
-      <details class="mt">
-        <summary>Configurar Firebase (opcional – push com app fechado)</summary>
-        <p class="muted">Os dados ficam apenas neste dispositivo (localStorage).</p>
-        <div class="grid">
-          <input id="fb_apiKey" placeholder="apiKey">
-          <input id="fb_authDomain" placeholder="authDomain">
-          <input id="fb_projectId" placeholder="projectId">
-          <input id="fb_storageBucket" placeholder="storageBucket">
-          <input id="fb_messagingSenderId" placeholder="messagingSenderId">
-          <input id="fb_appId" placeholder="appId">
-          <input id="fb_measurementId" placeholder="measurementId (opcional)">
-          <input id="fb_vapidKey" placeholder="VAPID public key">
-        </div>
-        <div class="actions">
-          <button id="btnSaveFirebase" class="btn">Salvar</button>
-          <button id="btnClearFirebase" class="btn warn">Limpar</button>
-        </div>
-      </details>
-    </section>
-    <section class="card">
-      <h2>Histórico de Sinais</h2>
-      <table id="tblSignals">
-        <thead><tr><th>Hora</th><th>Par</th><th>Tipo</th><th>Preço</th><th>RSI</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </section>
-    <section class="card">
-      <h2>Logs</h2>
-      <pre id="logs">Aguardando…</pre>
-    </section>
-  </main>
-  <footer class="footer">
-    <span>v93 • GitHub Pages • Tema azul/escuro</span>
-  </footer>
-  <script src="/signals-ai-capacitor-v92/lib/ta.js"></script>
-  <script src="/signals-ai-capacitor-v92/app.js" type="module"></script>
+  <h1>Signals AI — v9.2</h1>
+
+  <div class="row">
+    <button id="btnRegister">Register Push</button>
+    <button id="btnTest">Test Push</button>
+  </div>
+
+  <div class="row">
+    <label>Estrategia:
+      <select id="strategy">
+        <option value="day">Day Trade (EMA9×EMA21 + RSI)</option>
+        <option value="swing">Swing (EMA20×EMA50 + RSI)</option>
+      </select>
+    </label>
+    <button id="btnStart">Start</button>
+    <button id="btnStop">Stop</button>
+  </div>
+
+  <h3>Histórico de Sinais</h3>
+  <table id="hist">
+    <thead>
+      <tr>
+        <th>Data</th><th>Par</th><th>Estratégia</th><th>Direção</th><th>Preço</th><th>Resultado</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Log</h3>
+  <div id="log">Aguardando…</div>
+
+  <script src="app.js"></script>
 </body>
 </html>
