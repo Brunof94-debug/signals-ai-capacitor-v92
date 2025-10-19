@@ -1,35 +1,28 @@
-name: Android APK
-
+name: Deploy to GitHub Pages (web only)
 on:
   push:
-    branches: [main]
-
+    branches: [ main ]
+permissions:
+  contents: write
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    - name: Install dependencies
-      run: |
-        npm install
-        npm install -D typescript
-        npm install -g @capacitor/cli
-    - name: Add Android platform
-      run: npx cap add android
-    - name: Place google-services.json
-      if: env.GOOGLE_SERVICES_JSON_BASE64
-      env:
-        GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
-      run: |
-        echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
-    - name: Build Android debug APK
-      run: |
-        cd android
-        ./gradlew assembleDebug
-    - uses: actions/upload-artifact@v4
-      with:
-        name: app-debug
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+      - uses: actions/checkout@v4
+
+      # Se já tiver os arquivos prontos em web/, copia para docs/
+      - name: Prepare docs
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -r web/* docs/
+
+      - name: Commit docs if changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add docs
+            git commit -m "Update docs from web on $(date -Iseconds)"
+            git push
+          fi
